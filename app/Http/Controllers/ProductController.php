@@ -3,83 +3,141 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Traits\ImageOperations;
+use App\Traits\Response;
+use App\Traits\ValidationEngine;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    use Response, ValidationEngine, ImageOperations;
+
+
+
+
+    
+    private $validation_rules = [
+        'create' => [
+            'name' => ['required'],
+            'description' => ['required'],
+            'price' => ['required'],
+            'image' => ['required', 'mimes:jpeg,png,bmp'],
+        ],
+        'update' => [
+            'name' => ['required'],
+            'description' => ['required'],
+            'price' => ['required'],
+            'image' => ['mimes:jpeg,png,bmp'],
+        ]
+    ];
+
+
     /**
-     * Display a listing of the resource.
+     *  list of all products
      *
-     * @return \Illuminate\Http\Response
+     * 
      */
     public function index()
     {
-        //
+        try {
+            $products = Product::all();
+
+            return $this->successResponse($products);
+        } catch (Exception $error) {
+            return $this->errorResponse($error->getMessage());
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function show($id)
     {
-        //
+        if (!$data = Product::find($id)) {
+            return $this->notFoundResponse();
+        }
+
+        return $this->successResponse($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+    //delete product
+    public function destroy($id)
+    {
+
+        if (!$data = Product::find($id)) {
+            return $this->notFoundResponse();
+        }
+
+        $data->delete();
+
+        return $this->deleteResponse('Product deleted');
+    }
+
+
+    //create a new product
     public function store(Request $request)
     {
-        //
+        $this->validator($request->all(), $this->product_validation_rules['create'])->validate();
+
+        $upload_image = $this->uploadImage($request);
+
+        if ($upload_image['status'] == 'error') {
+            return $this->errorResponse($upload_image['errorMessage'], 200);
+        }
+
+
+        $image_link = $upload_image['data'];
+
+        try {
+            $product = new Product();
+            $product->name = $request->input('name');
+            $product->description = $request->input('description');
+            $product->price = $request->input('price');
+            $product->image_link = $image_link;
+            $product->save();
+
+            return $this->successResponse($product);
+        } catch (Exception $error) {
+            return $this->errorResponse($error->getMessage(), 200);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
+
+    //update a new product
+    public function update(Request $request, $id)
     {
-        //
+        $this->validator($request->all(), $this->product_validation_rules['update'])->validate();
+
+
+        try {
+
+            if (!$product = Product::find($id)) {
+                return $this->notFoundResponse();
+            }
+
+            if ($request->hasFile('image')) {
+
+                $this->removeImage(($product->image_link));
+
+                $upload_image = $this->uploadImage($request);
+
+                if ($upload_image['status'] == 'error') {
+                    return $this->errorResponse($upload_image['errorMessage']);
+                }
+
+                $image_link = $upload_image['data'];
+            }
+
+            $product->name = $request->input('name');
+            $product->description = $request->input('description');
+            $product->price = $request->input('price');
+            $product->image_link = $image_link;
+            $product->save();
+
+            return $this->successResponse($product);
+        } catch (Exception $error) {
+            return $this->errorResponse($error->getMessage(), 200);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
-    {
-        //
-    }
 }
