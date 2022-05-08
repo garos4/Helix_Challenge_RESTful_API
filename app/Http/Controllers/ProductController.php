@@ -38,22 +38,4 @@ class ProductController extends Controller
         return $this->successResponse($data);
     }
 
-
-    public function store(Request $request)
-    {
-        
-    }
-
-    //delete product
-    public function destroy($id)
-    {
-	
-		if (!$data = Product::find($id)) {
-			return $this->notFoundResponse();
-		}
-	
-		$data->delete();
-
-		return $this->deleteResponse('Product deleted');
-    }
 }
