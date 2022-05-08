@@ -109,6 +109,7 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 | Registering Lumen Passport for Authentication
 |--------------------------------------------------------------------------
 */
+
 $app->register(Laravel\Passport\PassportServiceProvider::class);
 $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 // $app->register(App\Providers\AppServiceProvider::class);
@@ -133,7 +134,7 @@ $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 |
 */
 
-\Dusterio\LumenPassport\LumenPassport::routes($app, ['prefix' => 'v1/oauth']);
+\Dusterio\LumenPassport\LumenPassport::routes($app, ['prefix' => 'api']);
 
 
 

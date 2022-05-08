@@ -3,83 +3,57 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Traits\Response;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+    use Response;
+
     /**
-     * Display a listing of the resource.
+     *  list of all products
      *
-     * @return \Illuminate\Http\Response
+     * 
      */
+
     public function index()
     {
-        //
+        try {
+            $products = Product::all();
+
+            return $this->successResponse($products);
+        } catch (Exception $error) {
+            return $this->errorResponse($error->getMessage());
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function show($id)
     {
-        //
+        if (!$data = Product::find($id)) {
+            return $this->notFoundResponse();
+        }
+
+        return $this->successResponse($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        //
+        
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
+    //delete product
+    public function destroy($id)
     {
-        //
-    }
+	
+		if (!$data = Product::find($id)) {
+			return $this->notFoundResponse();
+		}
+	
+		$data->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
-    {
-        //
+		return $this->deleteResponse('Product deleted');
     }
 }
