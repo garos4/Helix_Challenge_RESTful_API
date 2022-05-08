@@ -77,7 +77,11 @@ class ProductController extends Controller
     //create a new product
     public function store(Request $request)
     {
-        $this->validator($request->all(), $this->product_validation_rules['create'])->validate();
+        $validation = $this->validator($request->all(), $this->validation_rules['create']);
+
+        if ($validation->fails()) {
+            return $this->errorResponse(['errors' => $validation->errors()->all()], 422);
+        }
 
         $upload_image = $this->uploadImage($request);
 
@@ -106,7 +110,11 @@ class ProductController extends Controller
     //update a new product
     public function update(Request $request, $id)
     {
-        $this->validator($request->all(), $this->product_validation_rules['update'])->validate();
+        $validation= $this->validator($request->all(), $this->validation_rules['update']);
+
+        if ($validation->fails()) {
+            return $this->errorResponse(['errors' => $validation->errors()->all()], 422);
+        }
 
 
         try {
@@ -126,12 +134,14 @@ class ProductController extends Controller
                 }
 
                 $image_link = $upload_image['data'];
+                
+                $product->image_link = $image_link;
+
             }
 
             $product->name = $request->input('name');
             $product->description = $request->input('description');
             $product->price = $request->input('price');
-            $product->image_link = $image_link;
             $product->save();
 
             return $this->successResponse($product);

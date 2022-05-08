@@ -12,7 +12,7 @@ class AuthController extends Controller
     
     use Response;
     
-    public function login(Request $request)
+    public function authenticate(Request $request)
     {
 
         $this->validate($request, [

@@ -20,6 +20,7 @@ $router->get('/', function () use ($router) {
 
 
 
+$router->post('/api/authenticate',  ['uses' => 'AuthController@authenticate']);
 
 $router->group(['prefix' => 'api', 'middleware' => [ 'json', 'cors', 'auth:api' ]], function () use ($router) {
     
