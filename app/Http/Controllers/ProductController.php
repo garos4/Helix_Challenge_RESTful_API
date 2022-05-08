@@ -16,6 +16,7 @@ class ProductController extends Controller
 
 
 
+    
     private $validation_rules = [
         'create' => [
             'name' => ['required'],
@@ -30,8 +31,6 @@ class ProductController extends Controller
             'image' => ['mimes:jpeg,png,bmp'],
         ]
     ];
-
-
 
 
     /**
@@ -140,5 +139,5 @@ class ProductController extends Controller
             return $this->errorResponse($error->getMessage(), 200);
         }
     }
-    
+
 }
