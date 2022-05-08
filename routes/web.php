@@ -19,6 +19,8 @@ $router->get('/', function () use ($router) {
 
 
 
+
+
 $router->group(['prefix' => 'api', 'middleware' => [ 'json', 'cors', 'auth:api' ]], function () use ($router) {
     
     $router->get('/products',               ['uses' => 'ProductController@index']);
@@ -27,16 +29,14 @@ $router->group(['prefix' => 'api', 'middleware' => [ 'json', 'cors', 'auth:api' 
     
     $router->post('/products',              ['uses' => 'ProductController@store']);
     
-    $router->put('/products/{id}',         ['uses' => 'ProductController@update']);
+    $router->put('/products/{id}',          ['uses' => 'ProductController@update']);
     
     $router->delete('/products/{id}',       ['uses' => 'ProductController@destroy']);
 
     
-    $router->get('/user/products',          ['uses' => 'UserProductController@userProducts']);
+    $router->get('/user/products',               ['uses' => 'UserProductController@userProducts']);
 
     $router->get('/user/products/attach/{id}',   ['uses' => 'UserProductController@attach']);    
     
     $router->get('/user/products/remove/{id}',   ['uses' => 'UserProductController@remove']);
-
-
 });
