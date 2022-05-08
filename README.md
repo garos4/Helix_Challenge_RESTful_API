@@ -1,19 +1,23 @@
-# Lumen PHP Framework
+# RESTful API Code Challenge
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+This is a laravel Lumen framework application. I used lumen-passport for authentication by generating tokens and handle authentication sessions.
 
-## Official Documentation
+## To run the project
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+1. Clone project
+2. Run  **composer install**
+3. Set up your database, create your .env file and provide the db_name and user credentials
+4. Run **php artisan key:generate** 
+5. Run **php artisan migrate** to create the tables in the database
+6. Run **php artisan passport:install** to create client ID's for the application
+7. Run **php artisan db:seed** to populate the user table
+8. Run **php artisan serve** to start the application
 
-## Contributing
+## Testing the endpoints
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+I used insomnia to test the endpoints.
+If you are using insomnia, you can just import the Helix_coding_challenge file and the endpoints will be imported
 
 ## Security Vulnerabilities
 
