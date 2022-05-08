@@ -31,10 +31,12 @@ $router->group(['prefix' => 'api', 'middleware' => [ 'json', 'cors', 'auth:api' 
     
     $router->delete('/products/{id}',       ['uses' => 'ProductController@destroy']);
 
-    $router->get('/attach/products/{id}',   ['uses' => 'UserProductController@attach']);
     
-    $router->get('/remove/products/{id}',   ['uses' => 'UserProductController@remove']);
-
     $router->get('/user/products',          ['uses' => 'UserProductController@userProducts']);
+
+    $router->get('/user/products/attach/{id}',   ['uses' => 'UserProductController@attach']);    
+    
+    $router->get('/user/products/remove/{id}',   ['uses' => 'UserProductController@remove']);
+
 
 });
