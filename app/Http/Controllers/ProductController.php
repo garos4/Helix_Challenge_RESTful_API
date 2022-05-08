@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Traits\ImageOperations;
 use App\Traits\Response;
 use App\Traits\ValidationEngine;
 use Exception;
@@ -10,17 +11,26 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    use Response, ValidationEngine;
+    use Response, ValidationEngine, ImageOperations;
 
 
 
 
-    private $product_validation_rules = [
-        'name' => ['required'],
-        'description' => ['required'],
-        'price' => ['required'],
-        'image' => ['required', 'mimes:jpeg,png,bmp'],
+    private $validation_rules = [
+        'create' => [
+            'name' => ['required'],
+            'description' => ['required'],
+            'price' => ['required'],
+            'image' => ['required', 'mimes:jpeg,png,bmp'],
+        ],
+        'update' => [
+            'name' => ['required'],
+            'description' => ['required'],
+            'price' => ['required'],
+            'image' => ['mimes:jpeg,png,bmp'],
+        ]
     ];
+
 
 
 
@@ -68,12 +78,67 @@ class ProductController extends Controller
     //create a new product
     public function store(Request $request)
     {
-        
-        $this->validator($request->all(),$this->product_validation_rules)->validate();
+        $this->validator($request->all(), $this->product_validation_rules['create'])->validate();
 
+        $upload_image = $this->uploadImage($request);
+
+        if ($upload_image['status'] == 'error') {
+            return $this->errorResponse($upload_image['errorMessage'], 200);
+        }
+
+
+        $image_link = $upload_image['data'];
+
+        try {
+            $product = new Product();
+            $product->name = $request->input('name');
+            $product->description = $request->input('description');
+            $product->price = $request->input('price');
+            $product->image_link = $image_link;
+            $product->save();
+
+            return $this->successResponse($product);
+        } catch (Exception $error) {
+            return $this->errorResponse($error->getMessage(), 200);
+        }
     }
 
-    
-    
 
+    //update a new product
+    public function update(Request $request, $id)
+    {
+        $this->validator($request->all(), $this->product_validation_rules['update'])->validate();
+
+
+        try {
+
+            if (!$product = Product::find($id)) {
+                return $this->notFoundResponse();
+            }
+
+            if ($request->hasFile('image')) {
+
+                $this->removeImage(($product->image_link));
+
+                $upload_image = $this->uploadImage($request);
+
+                if ($upload_image['status'] == 'error') {
+                    return $this->errorResponse($upload_image['errorMessage']);
+                }
+
+                $image_link = $upload_image['data'];
+            }
+
+            $product->name = $request->input('name');
+            $product->description = $request->input('description');
+            $product->price = $request->input('price');
+            $product->image_link = $image_link;
+            $product->save();
+
+            return $this->successResponse($product);
+        } catch (Exception $error) {
+            return $this->errorResponse($error->getMessage(), 200);
+        }
+    }
+    
 }
