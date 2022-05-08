@@ -78,6 +78,8 @@ $app->configure('app');
 
 $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
+     'json_request' => \App\Http\Middleware\JsonMiddleware::class,
+     'cors' => \App\Http\Middleware\CorsMiddleware::class
 ]);
 
 /*

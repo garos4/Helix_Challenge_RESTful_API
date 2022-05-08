@@ -16,3 +16,7 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->group(['prefix' => 'api', 'middleware' => ['json','cors']], function () use ($router) {
+    $router->get('/products',  ['uses' => 'ProductController@index']);
+});

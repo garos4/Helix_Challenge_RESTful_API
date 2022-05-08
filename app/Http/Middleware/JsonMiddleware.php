@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class ExampleMiddleware
+class JsonMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,6 +15,11 @@ class ExampleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+
+        $request->headers->set("Accept", "application/json");
+
+        $response = $next($request);
+
+        return $response;
     }
 }
