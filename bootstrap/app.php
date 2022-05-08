@@ -23,9 +23,9 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-$app->withFacades();
+ $app->withFacades();
 
-$app->withEloquent();
+ $app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ $app->singleton(
 |
 */
 
-$app->configure('app');
+$app->configure('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -76,11 +76,10 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-$app->routeMiddleware([
+ $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
-     'json_request' => \App\Http\Middleware\JsonMiddleware::class,
-     'cors' => \App\Http\Middleware\CorsMiddleware::class
-]);
+ ]);
+ 
 
 /*
 |--------------------------------------------------------------------------
@@ -93,16 +92,28 @@ $app->routeMiddleware([
 |
 */
 
+
+/*
+|--------------------------------------------------------------------------
+| Registering Lumen Generator
+|--------------------------------------------------------------------------
+|
+| Lumen Generator will help me access some artisan commands that are not included in
+| Laravel Lumen by default
+*/
+$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
+
+
+/*
+|--------------------------------------------------------------------------
+| Registering Lumen Passport for Authentication
+|--------------------------------------------------------------------------
+*/
+$app->register(Laravel\Passport\PassportServiceProvider::class);
+$app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
-
-//Registering services for Lumen Generator
-$app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
-
-//Registering services for lumen Passport
-$app->register(Laravel\Passport\PassportServiceProvider::class);
-$app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +125,17 @@ $app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 | can respond to, as well as the controllers that may handle them.
 |
 */
+
+/*
+|--------------------------------------------------------------------------
+| Create necessary routes for laravel passport
+|--------------------------------------------------------------------------
+|
+*/
+
+\Dusterio\LumenPassport\LumenPassport::routes($app, ['prefix' => 'v1/oauth']);
+
+
 
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
