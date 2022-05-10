@@ -16,13 +16,12 @@ This is a laravel Lumen framework application. I used lumen-passport for authent
 
 ## Testing the endpoints
 
-I used insomnia to test the endpoints.
+I used insomnia API Client to test the endpoints.
 If you are using insomnia, you can just import the Helix_coding_challenge file and the endpoints will be imported
 
-## Security Vulnerabilities
+## API Endpoints
+To get a list of the API Endpoints,
+1. change directory into api_docs
+2. run ***npx serve***
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This will serve the api documentation on a link and then open it in your browser.
