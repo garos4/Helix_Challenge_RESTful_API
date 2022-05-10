@@ -79,6 +79,8 @@ class ProductController extends Controller
     {
         $validation = $this->validator($request->all(), $this->validation_rules['create']);
 
+        //return $this->successResponse($request->input());
+
         if ($validation->fails()) {
             return $this->errorResponse(['errors' => $validation->errors()->all()], 422);
         }
@@ -86,7 +88,7 @@ class ProductController extends Controller
         $upload_image = $this->uploadImage($request);
 
         if ($upload_image['status'] == 'error') {
-            return $this->errorResponse($upload_image['errorMessage'], 200);
+            return $this->errorResponse($upload_image['errorMessage'], 422);
         }
 
 
