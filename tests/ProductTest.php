@@ -2,6 +2,7 @@
 
 use App\Models\Product;
 use App\Models\User;
+use App\Traits\RefreshDatabaseForTesting;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Testing\DatabaseMigrations;
@@ -18,9 +19,13 @@ class ProductTest extends TestCase
      * @return void
      */
 
+    use RefreshDatabaseForTesting;
+
 
     public function test_get_products()
     {
+
+        $this->refresh_database_seed_passport_install();
 
         $user = User::factory()->create();
 
@@ -29,7 +34,7 @@ class ProductTest extends TestCase
         $token = $user->createToken('ChallengeApp')->accessToken;
         $headers['Authorization'] = 'Bearer ' . $token;
 
-        $response=$this->json('get','/api/products', [], $headers);
+        $response = $this->json('get', '/api/products', [], $headers);
 
 
         $response->assertResponseStatus(200);
@@ -37,6 +42,7 @@ class ProductTest extends TestCase
 
     public function test_get_products_by_id()
     {
+        $this->refresh_database_seed_passport_install();
 
         $user = User::factory()->create();
 
@@ -45,17 +51,18 @@ class ProductTest extends TestCase
         $headers = ['Accept' => 'application/json'];
 
         $token = $user->createToken('ChallengeApp')->accessToken;
+
         $headers['Authorization'] = 'Bearer ' . $token;
 
-        $response=$this->json('get','/api/products/'.$product->id, [], $headers);
-
+        $response = $this->json('get', '/api/products/' . $product->id, [], $headers);
 
         $response->assertResponseStatus(200);
     }
 
-    
+
     public function test_update_products()
     {
+        $this->refresh_database_seed_passport_install();
 
         $user = User::factory()->create();
 
@@ -63,24 +70,25 @@ class ProductTest extends TestCase
 
         $headers = ['Accept' => 'application/json'];
 
-        $formData= [
-            'name'=>'Iphone',
-            'description'=>'Latest iphone',
-            'price'=>'25',
+        $formData = [
+            'name' => 'Iphone',
+            'description' => 'Latest iphone',
+            'price' => '25',
         ];
 
         $token = $user->createToken('ChallengeApp')->accessToken;
         $headers['Authorization'] = 'Bearer ' . $token;
 
-        $response=$this->json('put','/api/products/'.$product->id, $formData, $headers);
+        $response = $this->json('put', '/api/products/' . $product->id, $formData, $headers);
 
 
         $response->assertResponseStatus(200);
     }
 
-    
+
     public function test_delete_products_by_id()
     {
+        $this->refresh_database_seed_passport_install();
 
         $user = User::factory()->create();
 
@@ -91,7 +99,7 @@ class ProductTest extends TestCase
         $token = $user->createToken('ChallengeApp')->accessToken;
         $headers['Authorization'] = 'Bearer ' . $token;
 
-        $response=$this->json('delete','/api/products/'.$product->id, [], $headers);
+        $response = $this->json('delete', '/api/products/' . $product->id, [], $headers);
 
         $response->assertResponseStatus(200);
     }

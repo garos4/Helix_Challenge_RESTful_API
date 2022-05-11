@@ -14,14 +14,20 @@ This is a laravel Lumen framework application. I used lumen-passport for authent
 7. Run **php artisan db:seed** to populate the user table
 8. Run **php artisan serve** to start the application
 
-## Testing the endpoints
+## Running the tests
+1. Run phpunit with the command ***.\vendor\bin\phpunit.bat***
 
-I used insomnia API Client to test the endpoints.
-If you are using insomnia, you can just import the Helix_coding_challenge file and the endpoints will be imported
 
-## API Endpoints
+
+## API Endpoints/ Documentation
 To get a list of the API Endpoints,
 1. change directory into api_docs
 2. run ***npx serve***
 
 This will serve the api documentation on a link and then open it in your browser.
+
+
+## Testing the endpoints
+
+I used insomnia API Client to test the endpoints.
+If you are using insomnia, you can just import the Helix_coding_challenge file and the endpoints will be imported
