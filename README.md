@@ -3,19 +3,21 @@
 
 This is a laravel Lumen framework application. I used lumen-passport for authentication by generating tokens and handle authentication sessions.
 
-## To run the project
+## Setting up the project
 
 1. Clone project
 2. Run  **composer install**
 3. Set up your database, create your .env file and provide the db_name and user credentials
 4. Run **php artisan key:generate** 
-5. Run **php artisan migrate** to create the tables in the database
-6. Run **php artisan passport:install** to create client ID's for the application
-7. Run **php artisan db:seed** to populate the user table
-8. Run **php artisan serve** to start the application
 
 ## Running the tests
 1. Run phpunit with the command ***.\vendor\bin\phpunit.bat***
+
+## Running the project
+1. Run **php artisan migrate:fresh** to create the tables in the database
+2. Run **php artisan passport:install** to create client ID's for the application
+3. Run **php artisan db:seed** to populate the user table
+4. Run **php artisan serve** to start the application
 
 
 
